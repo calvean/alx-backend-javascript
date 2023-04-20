@@ -22,7 +22,7 @@ export class StudentHolberton {
     this._firstName = firstName;
     this._lastName = lastName;
     this._holbertonClass = holbertonClass;
-    // added holbe
+    // added holbertonclass attribute
   }
 
   get fullName() {
