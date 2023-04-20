@@ -13,6 +13,7 @@ export default class Building {
 
   // evacuation message
   evacuationWarningMessage() {
+    console.log(`The building has ${this._sqft} square feet.`);
     throw new Error('Class extending Building must override evacuationWarningMessage');
   }
 }
