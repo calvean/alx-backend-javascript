@@ -22,6 +22,7 @@ export class StudentHolberton {
     this._firstName = firstName;
     this._lastName = lastName;
     this._holbertonClass = holbertonClass;
+    // added holbe
   }
 
   get fullName() {
@@ -33,10 +34,12 @@ export class StudentHolberton {
   }
 
   get fullStudentDescription() {
-    return `${self._firstName} ${self._lastName} - ${self._holbertonClass._year} - ${self._holbertonClass._location}`;
+    return `${this._firstName} ${this._lastName} - ${this._holbertonClass._year} - ${this._holbertonClass._location}`;
+    // replaced self with this
   }
 }
 
+// moved asignment from top to bottom
 const student1 = new StudentHolberton("Guillaume", "Salva", class2020);
 const student2 = new StudentHolberton("John", "Doe", class2020);
 const student3 = new StudentHolberton("Albert", "Clinton", class2019);
