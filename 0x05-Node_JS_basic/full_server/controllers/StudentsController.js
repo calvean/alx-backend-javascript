@@ -1,10 +1,10 @@
 // StudentsController.js
-import readDatabase from '../utils';
+import readDatabase from './utils';
 
 class StudentsController {
   static async getAllStudents(request, response) {
     try {
-      const fields = await readDatabase('../database.csv');
+      const fields = await readDatabase('./database.csv');
       const students = [];
 
       students.push('This is the list of our students');
@@ -32,7 +32,7 @@ class StudentsController {
       response.status(500).send('Major parameter must be CS or SWE');
     } else {
       try {
-        const fields = await readDatabase('../database.csv');
+        const fields = await readDatabase('./database.csv');
         const students = fields[major];
         response.status(200).send(`List: ${students.join(', ')}`);
       } catch (error) {
