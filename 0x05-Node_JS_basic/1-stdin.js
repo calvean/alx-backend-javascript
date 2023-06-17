@@ -1,19 +1,16 @@
-process.stdin.setEncoding('utf8');
-
-console.log('Welcome to Holberton School, what is your name?');
+process.stdout.write('Welcome to Holberton School, what is your name?\n');
 
 process.stdin.on('data', (data) => {
-  const input = data.trim();
+  const name = data.toString().trim();
 
-  if (input === 'exit') {
-    console.log('This important software is now closing');
-    process.exit();
+  if (name === 'exit') {
+    process.stdout.write('This important software is now closing\n');
+    process.stdin.pause();
   } else {
-    console.log(`Your name is: ${input}`);
+    process.stdout.write(`Your name is: ${name}`);
   }
 });
 
 process.stdin.on('end', () => {
-  console.log('This important software is now closing');
-  process.exit();
+  process.stdout.write('This important software is now closing\n');
 });
