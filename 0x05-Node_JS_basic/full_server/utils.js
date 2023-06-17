@@ -1,29 +1,32 @@
 // utils.js
-import fs from 'fs/promises';
+import fs from 'fs';
 
-async function readDatabase(path) {
-  try {
-    const data = await fs.readFile(path, 'utf8');
-    const content = data.split('\n');
-
-    const students = content
-      .filter((item) => item)
-      .map((item) => item.split(','));
-
-    const fields = students.reduce((acc, student, i) => {
-      if (i !== 0) {
-        if (!acc[student[3]]) acc[student[3]] = [];
-        acc[student[3]].push(student[0]);
+function readDatabase(filePath) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        reject(err);
+        return;
       }
-      return acc;
-    }, {});
 
-    delete fields.field;
+      const content = data.split('\n');
 
-    return fields;
-  } catch (error) {
-    throw new Error(error);
-  }
+      const students = content
+        .filter((item) => item)
+        .map((item) => item.split(',')[0]);
+
+      const fields = {};
+      for (const student of students) {
+        const field = student.split(',')[3];
+        if (!fields[field]) {
+          fields[field] = [];
+        }
+        fields[field].push(student.split(',')[0]);
+      }
+
+      resolve(fields);
+    });
+  });
 }
 
 export default readDatabase;
