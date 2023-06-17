@@ -33,8 +33,10 @@ const app = http.createServer(async (req, res) => {
   }
 });
 
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+if (!module.parent) {
+  app.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+  });
+}
 
 module.exports = app;
