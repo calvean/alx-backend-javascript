@@ -1,24 +1,29 @@
-const fs = require('fs');
+// utils.js
+import fs from 'fs/promises';
 
-const readDatabase = (filePath) => new Promise((resolve, reject) => {
-  fs.readFile(filePath, 'utf8', (error, data) => {
-    if (error) {
-      reject(error);
-    } else {
-      const students = {
-        CS: [],
-        SWE: [],
-      };
-      const lines = data.trim().split('\n');
-      for (const line of lines) {
-        const [firstName, field] = line.split(',');
-        if (firstName && field) {
-          students[field.trim()].push(firstName.trim());
-        }
+async function readDatabase(path) {
+  try {
+    const data = await fs.readFile(path, 'utf8');
+    const content = data.split('\n');
+
+    const students = content
+      .filter((item) => item)
+      .map((item) => item.split(','));
+
+    const fields = students.reduce((acc, student, i) => {
+      if (i !== 0) {
+        if (!acc[student[3]]) acc[student[3]] = [];
+        acc[student[3]].push(student[0]);
       }
-      resolve(students);
-    }
-  });
-});
+      return acc;
+    }, {});
+
+    delete fields.field;
+
+    return fields;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
 
 export default readDatabase;

@@ -1,8 +1,7 @@
-const { Request, Response } = require('express');
-
+// AppController.js
 class AppController {
-  static getHomepage(req, res) {
-    res.status(200).send('Hello Holberton School!');
+  static getHomepage(request, response) {
+    response.send('Hello Holberton School!');
   }
 }
 

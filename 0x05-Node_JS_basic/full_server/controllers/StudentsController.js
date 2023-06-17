@@ -1,43 +1,38 @@
-const { Request, Response } = require('express');
-const readDatabase = require('../utils').default;
+// StudentsController.js
+import readDatabase from '../utils';
 
 class StudentsController {
-  static async getAllStudents(req, res) {
+  static async getAllStudents(request, response) {
     try {
-      const students = await readDatabase(req.app.locals.database);
-      let response = 'This is the list of our students\n';
+      const fields = await readDatabase('./database.csv');
+      const students = [];
 
-      const fields = Object.keys(students).sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+      students.push('This is the list of our students');
 
-      for (const field of fields) {
-        const fieldStudents = students[field];
-        const count = fieldStudents.length;
-        const studentList = fieldStudents.join(', ');
-        response += `Number of students in ${field}: ${count}. List: ${studentList}\n`;
+      for (const key of Object.keys(fields)) {
+        const msg = `Number of students in ${key}: ${fields[key].length}. List: ${fields[key].join(', ')}`;
+        students.push(msg);
       }
 
-      res.status(200).send(response);
+      response.send(students.join('\n'));
     } catch (error) {
-      res.status(500).send('Cannot load the database');
+      response.status(500).send('Cannot load the database');
     }
   }
 
-  static async getAllStudentsByMajor(req, res) {
-    const { major } = req.params;
+  static async getAllStudentsByMajor(request, response) {
+    const { major } = request.params;
 
     if (major !== 'CS' && major !== 'SWE') {
-      res.status(500).send('Major parameter must be CS or SWE');
-      return;
-    }
-
-    try {
-      const students = await readDatabase(req.app.locals.database);
-      const fieldStudents = students[major];
-      const studentList = fieldStudents.join(', ');
-      const response = `List: ${studentList}\n`;
-      res.status(200).send(response);
-    } catch (error) {
-      res.status(500).send('Cannot load the database');
+      response.status(500).send('Major parameter must be CS or SWE');
+    } else {
+      try {
+        const fields = await readDatabase('./database.csv');
+        const students = fields[major];
+        response.send(`List: ${students.join(', ')}`);
+      } catch (error) {
+        response.status(500).send('Cannot load the database');
+      }
     }
   }
 }
