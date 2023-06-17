@@ -1,4 +1,5 @@
-import { readDatabase } from '../utils';
+const { Request, Response } = require('express');
+const readDatabase = require('../utils').default;
 
 class StudentsController {
   static async getAllStudents(req, res) {
