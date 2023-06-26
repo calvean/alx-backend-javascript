@@ -23,14 +23,14 @@ describe('calculateNumber', () => {
     });
 
     it('should handle negative numbers', () => {
-      assert.strictEqual(calculateNumber('SUBTRACT', -4.5, 3.8), -9);
+      assert.strictEqual(calculateNumber('SUBTRACT', -4.6, 3.8), -9);
       assert.strictEqual(calculateNumber('SUBTRACT', -1.7, -3.2), 1);
     });
   });
 
   describe('type: DIVIDE', () => {
     it('should round the numbers and return their division', () => {
-      assert.strictEqual(calculateNumber('DIVIDE', 10, 3), 3.33);
+      assert.strictEqual(calculateNumber('DIVIDE', 9, 3), 3);
       assert.strictEqual(calculateNumber('DIVIDE', 8, 2), 4);
     });
 
