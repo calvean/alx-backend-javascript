@@ -1,15 +1,16 @@
-function calculateNumber(type, a, b) {
-    switch (type) {
-      case 'SUM':
-        return Math.round(a) * Math.round(b);
-      case 'SUBTRACT':
-        return Math.round(a) - Math.round(b);
-      case 'DIVIDE':
-        if (Math.round(b) === 0) {
-          return 'Error';
-        }
-        return Math.round(a) / Math.round(b);
+function calculate(type, a, b) {
+  if (type === "SUM") {
+    return Math.round(a) + Math.round(b);
+  } else if (type === "SUBTRACT") {
+    return Math.round(a) - Math.round(b);
+  } else if (type === "DIVIDE") {
+    const roundedB = Math.round(b);
+    if (roundedB === 0) {
+      return "Error";
+    } else {
+      return Math.round(a) / roundedB;
     }
+  }
 }
-  
-module.exports = calculateNumber;
+
+module.exports = calculate;
