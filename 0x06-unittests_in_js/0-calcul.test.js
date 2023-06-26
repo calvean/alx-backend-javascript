@@ -6,7 +6,7 @@ describe('calculateNumber', () => {
     assert.strictEqual(calculateNumber(1, 3), 4);
     assert.strictEqual(calculateNumber(1, 3.7), 5);
     assert.strictEqual(calculateNumber(1.2, 3.7), 5);
-    assert.strictEqual(calculateNumber(1.4, 3), 4);
+    assert.strictEqual(calculateNumber(1.6, 1), 3);
     assert.strictEqual(calculateNumber(1.5, 3.7), 6);
     assert.equal(calculateNumber(1.0, 0), 1);
     assert.equal(calculateNumber(0, 1.0), 1);
