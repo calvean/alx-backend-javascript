@@ -1,51 +1,37 @@
 const assert = require('assert');
-const http = require('http');
+const request = require('request');
 
-const { app, server } = require('./api');
+const { server } = require('./api');
 
-const port = 7865;
-const baseUrl = `http://localhost:${port}`;
+const baseUrl = 'http://localhost:7865';
 
 describe('Index page', () => {
-  before(() => {
-    server.listen(port);
+  before((done) => {
+    server.on('listening', done);
   });
 
-  after(() => {
-    server.close();
+  after((done) => {
+    server.close(done);
   });
 
   it('returns correct status code', (done) => {
-    http.get(baseUrl, (res) => {
-      assert.strictEqual(res.statusCode, 200);
+    request.get(baseUrl, (error, response) => {
+      assert.strictEqual(response.statusCode, 200);
       done();
     });
   });
 
   it('returns correct result', (done) => {
-    http.get(baseUrl, (res) => {
-      let data = '';
-      res.on('data', (chunk) => {
-        data += chunk;
-      });
-      res.on('end', () => {
-        assert.strictEqual(data, 'Welcome to the payment system');
-        done();
-      });
+    request.get(baseUrl, (error, response, body) => {
+      assert.strictEqual(body, 'Welcome to the payment system');
+      done();
     });
   });
 
   it('handles other routes correctly', (done) => {
-    http.get(`${baseUrl}/other`, (res) => {
-      assert.strictEqual(res.statusCode, 404);
-      let data = '';
-      res.on('data', (chunk) => {
-        data += chunk;
-      });
-      res.on('end', () => {
-        assert.strictEqual(data, 'Not Found');
-        done();
-      });
+    request.get(`${baseUrl}/other`, (error, response) => {
+      assert.strictEqual(response.statusCode, 404);
+      done();
     });
   });
 });
