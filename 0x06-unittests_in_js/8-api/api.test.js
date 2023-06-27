@@ -1,22 +1,51 @@
-const request = require('supertest');
-const { expect } = require('chai');
+const assert = require('assert');
+const http = require('http');
 
-const app = require('./api');
+const { app, server } = require('./api');
+
+const port = 7865;
+const baseUrl = `http://localhost:${port}`;
 
 describe('Index page', () => {
-  it('returns correct status code', async () => {
-    const response = await request(app).get('/');
-    expect(response.statusCode).to.equal(200);
+  before(() => {
+    server.listen(port);
   });
 
-  it('returns correct result', async () => {
-    const response = await request(app).get('/');
-    expect(response.text).to.equal('Welcome to the payment system');
+  after(() => {
+    server.close();
   });
 
-  it('handles other routes correctly', async () => {
-    const response = await request(app).get('/other');
-    expect(response.statusCode).to.equal(404);
-    expect(response.text).to.equal('Not Found');
+  it('returns correct status code', (done) => {
+    http.get(baseUrl, (res) => {
+      assert.strictEqual(res.statusCode, 200);
+      done();
+    });
+  });
+
+  it('returns correct result', (done) => {
+    http.get(baseUrl, (res) => {
+      let data = '';
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      res.on('end', () => {
+        assert.strictEqual(data, 'Welcome to the payment system');
+        done();
+      });
+    });
+  });
+
+  it('handles other routes correctly', (done) => {
+    http.get(`${baseUrl}/other`, (res) => {
+      assert.strictEqual(res.statusCode, 404);
+      let data = '';
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      res.on('end', () => {
+        assert.strictEqual(data, 'Not Found');
+        done();
+      });
+    });
   });
 });
