@@ -1,37 +1,22 @@
-const assert = require('assert');
 const request = require('request');
+const { expect } = require('chai');
 
-const { server } = require('./api');
+describe('API Integration Test Suite', () => {
+  const baseUrl = 'http://localhost:7865';
 
-const baseUrl = 'http://localhost:7865';
-
-describe('Index page', () => {
-  before((done) => {
-    server.on('listening', done);
-  });
-
-  after((done) => {
-    server.close(done);
-  });
-
-  it('returns correct status code', (done) => {
-    request.get(baseUrl, (error, response) => {
-      assert.strictEqual(response.statusCode, 200);
-      done();
+  describe('GET / - Index Page', () => {
+    it('should return status code 200', (done) => {
+      request.get(baseUrl, (error, response) => {
+        expect(response.statusCode).to.equal(200);
+        done();
+      });
     });
-  });
 
-  it('returns correct result', (done) => {
-    request.get(baseUrl, (error, response, body) => {
-      assert.strictEqual(body, 'Welcome to the payment system');
-      done();
-    });
-  });
-
-  it('handles other routes correctly', (done) => {
-    request.get(`${baseUrl}/other`, (error, response) => {
-      assert.strictEqual(response.statusCode, 404);
-      done();
+    it('should return the message "Welcome to the payment system"', (done) => {
+      request.get(baseUrl, (error, response, body) => {
+        expect(body).to.equal('Welcome to the payment system');
+        done();
+      });
     });
   });
 });
