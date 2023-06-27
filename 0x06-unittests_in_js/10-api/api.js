@@ -11,12 +11,10 @@ app.get('/cart/:id([0-9]+)', (req, res) => {
 
 app.get('/available_payments', (req, res) => {
   const paymentMethods = {
-    payment_methods: {
-      credit_cards: true,
-      paypal: false,
-    },
+    credit_cards: true,
+    paypal: false
   };
-  res.json(paymentMethods);
+  res.json({ payment_methods: paymentMethods });
 });
 
 app.post('/login', (req, res) => {
