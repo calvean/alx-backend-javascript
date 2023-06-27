@@ -31,4 +31,48 @@ describe('API Integration Test Suite', () => {
       });
     });
   });
+
+  describe('GET /cart/:id - Cart Page', () => {
+    it('should return status code 200 when :id is a number', () => {
+      const id = 123;
+      return new Promise((resolve, reject) => {
+        request.get(`${baseUrl}/cart/${id}`, (error, response) => {
+          if (error) {
+            reject(error);
+          } else {
+            expect(response.statusCode).to.equal(200);
+            resolve();
+          }
+        });
+      });
+    });
+
+    it('should return "Payment methods for cart :id" when :id is a number', () => {
+      const id = 123;
+      return new Promise((resolve, reject) => {
+        request.get(`${baseUrl}/cart/${id}`, (error, response, body) => {
+          if (error) {
+            reject(error);
+          } else {
+            expect(body).to.equal(`Payment methods for cart ${id}`);
+            resolve();
+          }
+        });
+      });
+    });
+
+    it('should return status code 404 when :id is not a number', () => {
+      const id = 'abc';
+      return new Promise((resolve, reject) => {
+        request.get(`${baseUrl}/cart/${id}`, (error, response) => {
+          if (error) {
+            reject(error);
+          } else {
+            expect(response.statusCode).to.equal(404);
+            resolve();
+          }
+        });
+      });
+    });
+  });
 });
