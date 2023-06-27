@@ -1,16 +1,17 @@
-function calculate(type, a, b) {
-  if (type === "SUM") {
-    return Math.round(a) + Math.round(b);
-  } else if (type === "SUBTRACT") {
-    return Math.round(a) - Math.round(b);
-  } else if (type === "DIVIDE") {
-    const roundedB = Math.round(b);
+function calculateNumber(type, a, b) {
+  const roundedA = Math.round(a);
+  const roundedB = Math.round(b);
+
+  if (type === 'SUM') {
+    return roundedA + roundedB;
+  } else if (type === 'SUBTRACT') {
+    return roundedA - roundedB;
+  } else if (type === 'DIVIDE') {
     if (roundedB === 0) {
-      return "Error";
-    } else {
-      return Math.round(a) / roundedB;
+      return 'Error';
     }
+    return roundedA / roundedB;
   }
 }
 
-module.exports = calculate;
+module.exports = calculateNumber;
