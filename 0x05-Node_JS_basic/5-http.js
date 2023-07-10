@@ -1,29 +1,40 @@
 const http = require('http');
-const countStudents = require('./3-read_file_async');
+const fs = require('fs');
 
-const hostname = '127.0.0.1';
-const port = 1245;
+const app = http.createServer((req, res) => {
+  const { method, url } = req;
 
-const app = http.createServer(async (req, res) => {
-  res.statusCode = 200;
-  if (req.url === '/') {
-    res.end('Hello Holberton School!');
-  } else if (req.url === '/students') {
-    let dbInfo = 'This is the list of our students\n';
-    await countStudents(process.argv[2])
-      .then((msg) => {
-        dbInfo += msg;
-        res.end(dbInfo);
-      })
-      .catch((err) => {
-        dbInfo += err.message;
-        res.end(dbInfo);
-      });
+  if (method === 'GET' && url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello Holberton School!\n');
+  } else if (method === 'GET' && url === '/students') {
+    const database = 'database.csv';
+
+    fs.readFile(database, 'utf8', (err, data) => {
+      if (err) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end('Internal Server Error\n');
+        return;
+      }
+
+      const students = data.trim().split('\n');
+
+      if (students.length === 0) {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('This is the list of our students\nNo students found\n');
+      } else {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end(`This is the list of our students\n${data}`);
+      }
+    });
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('404 Not Found\n');
   }
 });
 
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}`);
+app.listen(1245, () => {
+  console.log('Server listening on port 1245');
 });
 
 module.exports = app;
